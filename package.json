@@ -1,0 +1,35 @@
+{
+  "name": "react-integration",
+  "version": "0.0.0",
+  "description": "Use custom elements in your React components without resorting to hacks.",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/skatejs/react-integration.git"
+  },
+  "keywords": [
+    "react",
+    "web",
+    "components",
+    "custom",
+    "elements"
+  ],
+  "author": "Trey Shugart <treshugart@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/skatejs/react-integration/issues"
+  },
+  "homepage": "https://github.com/skatejs/react-integration#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^1.10.1",
+    "gulp": "^3.9.0",
+    "skatejs-build": "skatejs/build#e4a442f"
+  },
+  "peerDependencies": {
+    "react": ">=0.14.0"
+  }
+}
