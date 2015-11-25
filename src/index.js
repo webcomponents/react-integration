@@ -1,5 +1,3 @@
-import React from 'react';
-
 function setCustomElementProps (customElement, props) {
   Object.keys(props).forEach(function (key) {
     if (key !== 'children') {
@@ -12,13 +10,16 @@ export default function (CustomElement, opts = {}) {
   opts.containerTagName = opts.containerTagName || 'div';
   opts.contentProperty = opts.contentProperty || 'content';
 
+  const React = opts.React || window.React;
+  const ReactDOM = opts.ReactDOM || window.ReactDOM;
+
   return React.createClass({
     render () {
-      return <div />;
+      return React.createElement('div');
     },
     renderChildren (props) {
       // Create the React render tree on the content node.
-      ReactDOM.render(<div>{props.children}</div>, this._realContentNode);
+      ReactDOM.render(React.createElement('div', null, props.children), this._realContentNode);
 
       // Apply the new content to the custom element and let it handle it.
       this._realCustomElement[opts.contentProperty] = this._realContentNode;
