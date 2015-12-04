@@ -1,7 +1,9 @@
+import camelCase from 'camelcase';
+
 function setCustomElementProps (customElement, props) {
   Object.keys(props).forEach(function (key) {
     if (key !== 'children') {
-      customElement.setAttribute(key, props[key]);
+      customElement[key] = props[key];
     }
   });
 }
@@ -13,7 +15,7 @@ export default function (CustomElement, opts = {}) {
   const React = opts.React || window.React;
   const ReactDOM = opts.ReactDOM || window.ReactDOM;
 
-  return React.createClass({
+  const ReactClass = React.createClass({
     render () {
       return React.createElement('div');
     },
@@ -50,4 +52,8 @@ export default function (CustomElement, opts = {}) {
       this.renderChildren(props);
     }
   });
+
+  ReactClass.displayName = camelCase(CustomElement.id);
+
+  return ReactClass;
 }

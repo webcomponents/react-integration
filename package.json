@@ -23,10 +23,17 @@
     "url": "https://github.com/skatejs/react-integration/issues"
   },
   "homepage": "https://github.com/skatejs/react-integration#readme",
-  "dependencies": {},
+  "dependencies": {
+    "camel-case": "^1.2.0"
+  },
   "devDependencies": {
+    "envify": "^3.4.0",
     "eslint": "^1.10.1",
     "gulp": "^3.9.0",
+    "react": "^0.14.3",
+    "react-addons-test-utils": "^0.14.3",
+    "react-dom": "^0.14.3",
+    "skatejs": "^0.14.3",
     "skatejs-build": "skatejs/build#e4a442f"
   },
   "peerDependencies": {
