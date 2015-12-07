@@ -27,7 +27,6 @@
     "camel-case": "^1.2.0"
   },
   "devDependencies": {
-    "envify": "^3.4.0",
     "eslint": "^1.10.1",
     "gulp": "^3.9.0",
     "react": "^0.14.3",
