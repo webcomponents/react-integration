@@ -40,7 +40,7 @@ describe('react-integration;', function () {
         return ReactDOM.render(<App />, fixture);
     }
 
-    describe('with a terminal web component;', function () {
+    describe('(React > React wrapped terminal web component);', function () {
         describe('that has an attribute;', function () {
             var ReactComponent;
 
@@ -155,7 +155,7 @@ describe('react-integration;', function () {
         });
     });
 
-    describe('with a container web component;', function () {
+    describe('(React > React wrapped container web component', function () {
 
         function isReactRoot (elem) {
             return elem.hasAttribute('data-reactid') && elem.getAttribute('data-reactid').split('.').length === 2;
@@ -188,7 +188,7 @@ describe('react-integration;', function () {
             ReactComponent = makeReactComponent(webComponentConstructor);
         });
 
-        it('that contains a DOM element: content is redirected to the correct container', function () {
+        it('> DOM element): content is redirected to the correct container', function () {
             renderApp(
                 React.createClass({
                     render: function () {
@@ -210,7 +210,7 @@ describe('react-integration;', function () {
             expect(webComponentContent.className).to.equal('content', 'web component content');
         });
 
-        it('that contains a DOM element: properties are passed to the wrapped React component', function () {
+        it('> DOM element): properties are passed to the wrapped React component', function () {
             var renderedApp = renderApp(
                 React.createClass({
                     render: function () {
@@ -227,7 +227,7 @@ describe('react-integration;', function () {
             expect(document.getElementById('user-inserted-contents').textContent).to.equal('updated text');
         });
 
-        it('that contains another React component: properties flow down into the child React component', function () {
+        it('> React component): properties flow down into the child React component', function () {
             const ContainedReactComponent = React.createClass({
                 render: function () {
                     return <em id="user-inserted-contents">{this.props.text}</em>
@@ -250,26 +250,18 @@ describe('react-integration;', function () {
             expect(document.getElementById('user-inserted-contents').textContent).to.equal('updated text');
         });
 
-        it('that contains a DOM element: events triggered on the DOM element can be handled outside the component', function () {
+        it('> DOM element): events triggered on the DOM element can be handled on click', function () {
             var clicked = false;
             function handleClick () {
                 clicked = true;
             }
 
-            var RC = React.createClass({
-                render: function () {
-                    return <div></div>
-                }
-            });
-
-            var renderedApp = renderApp(
+            renderApp(
                 React.createClass({
                     render: function () {
-                        return <div>
-                            <ReactComponent onClick={handleClick}>
-                                <em id="user-inserted-contents">{this.props.text}</em>
-                            </ReactComponent>
-                        </div>;
+                        return <ReactComponent>
+                                    <em onClick={handleClick} id="user-inserted-contents">Click me</em>
+                            </ReactComponent>;
                     }
                 })
             );
