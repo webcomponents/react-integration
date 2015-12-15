@@ -23,7 +23,8 @@
     "browser": true
   },
   "ecmaFeatures": {
-    "modules": true
+    "modules": true,
+    "jsx": true
   },
   "extends": "eslint:recommended",
   "globals": {
@@ -33,5 +34,8 @@
     "describe": true,
     "expect": true,
     "it": true
-  }
+  },
+  "plugins": [
+    "react"
+  ]
 }
