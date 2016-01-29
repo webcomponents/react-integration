@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "description": "Use custom elements in your React components without resorting to hacks.",
   "main": "lib/index.js",
+  "jsnext:main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -34,7 +35,7 @@
     "react-addons-test-utils": "^0.14.3",
     "react-dom": "^0.14.3",
     "skatejs": "^0.14.3",
-    "skatejs-build": "skatejs/build#e4a442f"
+    "skatejs-build": "skatejs/build#6dbe25a"
   },
   "peerDependencies": {
     "react": ">=0.14.0"
