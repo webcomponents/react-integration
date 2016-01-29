@@ -1,5 +1,5 @@
 {
-  "name": "react-integration",
+  "name": "skatejs-react-integration",
   "version": "0.0.0",
   "description": "Use custom elements in your React components without resorting to hacks.",
   "main": "lib/index.js",
