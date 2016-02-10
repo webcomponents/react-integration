@@ -1,10 +1,19 @@
 import camelCase from 'camelcase';
 
-function setCustomElementProps (customElement, props) {
+function makeCustomElementProps (props) {
+  let customElementProps = {};
   Object.keys(props).forEach(function (key) {
     if (key !== 'children') {
-      customElement[key] = props[key];
+      customElementProps[key] = props[key];
     }
+  });
+
+  return customElementProps;
+}
+
+function setCustomElementProps (customElement, props) {
+  Object.keys(makeCustomElementProps(props)).forEach(function (key) {
+    customElement[key] = props[key];
   });
 }
 
@@ -36,7 +45,7 @@ export default function (CustomElement, opts = {}) {
 
       // The real custom element is the component that we want to contain the
       // new render tree as its content.
-      this._realCustomElement = new CustomElement();
+      this._realCustomElement = CustomElement(makeCustomElementProps(this.props));
 
       // The real portal node is this node which we will be appending the real
       // custom element to.
