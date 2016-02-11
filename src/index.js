@@ -1,4 +1,4 @@
-import camelCase from 'camelcase';
+import camelCase from 'camel-case';
 
 function makeCustomElementProps (props) {
   let customElementProps = {};
@@ -18,31 +18,22 @@ function setCustomElementProps (customElement, props) {
 }
 
 export default function (CustomElement, opts = {}) {
-  opts.containerTagName = opts.containerTagName || 'div';
-  opts.contentProperty = opts.contentProperty || 'content';
-
   const React = opts.React || window.React;
   const ReactDOM = opts.ReactDOM || window.ReactDOM;
-
+  const container = opts.container || 'div';
+  const content = opts.property || 'content';
   const ReactClass = React.createClass({
     render () {
-      return React.createElement('div');
+      return React.createElement(container);
     },
     renderChildren (props) {
-      // Create the React render tree on the content node.
-      ReactDOM.render(React.createElement('div', null, props.children), this._realContentNode);
-
       // Apply the new content to the custom element and let it handle it.
-      this._realCustomElement[opts.contentProperty] = this._realContentNode;
+      this._realCustomElement[content] = props.children;
 
       // Passes on all non-react-special props to the custom element.
       setCustomElementProps(this._realCustomElement, props);
     },
     componentDidMount () {
-      // The real content node is the node that will act as the new React
-      // render tree and will house the children.
-      this._realContentNode = document.createElement(opts.containerTagName);
-
       // The real custom element is the component that we want to contain the
       // new render tree as its content.
       this._realCustomElement = CustomElement(makeCustomElementProps(this.props));
