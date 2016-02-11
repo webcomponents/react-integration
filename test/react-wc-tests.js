@@ -6,6 +6,10 @@ import reactify from '../src/index';
 import skate from 'skatejs';
 import helperElement from 'skatejs/test/lib/element';
 
+function afterMutations (fn) {
+  setTimeout(fn, 100);
+}
+
 describe('react-integration;', function () {
   let fixture;
 
@@ -125,6 +129,9 @@ describe('react-integration;', function () {
               elem.firstChild.removeAttribute('aria-hidden');
             }
           },
+          attached: function (elem) {
+            elem._hidden_on_attach = elem.hidden;
+          },
           properties: {
             hidden: {
               set: function (elem) {
@@ -150,6 +157,21 @@ describe('react-integration;', function () {
         );
 
         expect(getWebComponent(tagName).firstChild.hasAttribute('aria-hidden')).to.equal(true);
+      });
+
+      it('the web component properties are available on attach', function (done) {
+        renderApp(
+          React.createClass({
+            render: function () {
+              return <ReactComponent hidden={true}/>;
+            }
+          })
+        );
+
+        afterMutations(function () {
+          expect(getWebComponent(tagName)._hidden_on_attach).to.equal(true);
+          done();
+        });
       });
     });
   });
