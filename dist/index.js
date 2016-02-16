@@ -1,5 +1,5 @@
 // node_modules/upper-case/upper-case.js
-(typeof window === 'undefined' ? global : window).__078293c4a2a3404fae99bd9c4a7e7553 = (function () {
+(typeof window === 'undefined' ? global : window).__0e9763547c35ca767133db3ffe6f5768 = (function () {
   var module = {
     exports: {}
   };
@@ -60,7 +60,7 @@
   return module.exports;
 }).call(this);
 // node_modules/lower-case/lower-case.js
-(typeof window === 'undefined' ? global : window).__8fb9658e097d86b462e4d40136f700ac = (function () {
+(typeof window === 'undefined' ? global : window).__c0bde424d620670d7e404f3ff51bb02f = (function () {
   var module = {
     exports: {}
   };
@@ -125,7 +125,7 @@
   return module.exports;
 }).call(this);
 // node_modules/sentence-case/vendor/non-word-regexp.js
-(typeof window === 'undefined' ? global : window).__f7c390400dde7750a4505f639dd36fc2 = (function () {
+(typeof window === 'undefined' ? global : window).__dabd2e22880c4ce5d874d8d6efcb4600 = (function () {
   var module = {
     exports: {}
   };
@@ -137,7 +137,7 @@
   return module.exports;
 }).call(this);
 // node_modules/sentence-case/vendor/camel-case-regexp.js
-(typeof window === 'undefined' ? global : window).__1afeb76be928fe89edae085b72f86028 = (function () {
+(typeof window === 'undefined' ? global : window).__473b12cc4c4730af802a13974665df74 = (function () {
   var module = {
     exports: {}
   };
@@ -149,7 +149,7 @@
   return module.exports;
 }).call(this);
 // node_modules/sentence-case/vendor/trailing-digit-regexp.js
-(typeof window === 'undefined' ? global : window).__2cf42b304fe3e4c40c459ee9d4cdbb71 = (function () {
+(typeof window === 'undefined' ? global : window).__509d2ae9ab2e49c147b143e8795e92c6 = (function () {
   var module = {
     exports: {}
   };
@@ -161,17 +161,17 @@
   return module.exports;
 }).call(this);
 // node_modules/sentence-case/sentence-case.js
-(typeof window === 'undefined' ? global : window).__b51900f4bff5c5c10c0aa5153f4cd77b = (function () {
+(typeof window === 'undefined' ? global : window).__956a4dd603b950c9910478a46703d8af = (function () {
   var module = {
     exports: {}
   };
   var exports = module.exports;
   
-  var lowerCase = __8fb9658e097d86b462e4d40136f700ac
+  var lowerCase = __c0bde424d620670d7e404f3ff51bb02f
   
-  var NON_WORD_REGEXP = __f7c390400dde7750a4505f639dd36fc2
-  var CAMEL_CASE_REGEXP = __1afeb76be928fe89edae085b72f86028
-  var TRAILING_DIGIT_REGEXP = __2cf42b304fe3e4c40c459ee9d4cdbb71
+  var NON_WORD_REGEXP = __dabd2e22880c4ce5d874d8d6efcb4600
+  var CAMEL_CASE_REGEXP = __473b12cc4c4730af802a13974665df74
+  var TRAILING_DIGIT_REGEXP = __509d2ae9ab2e49c147b143e8795e92c6
   
   /**
    * Sentence case a string.
@@ -212,14 +212,14 @@
   return module.exports;
 }).call(this);
 // node_modules/camel-case/camel-case.js
-(typeof window === 'undefined' ? global : window).__221c35969ee6d0a579bc8312fe2ef67c = (function () {
+(typeof window === 'undefined' ? global : window).__309f4b8fba2bbb751831827d61a7c20d = (function () {
   var module = {
     exports: {}
   };
   var exports = module.exports;
   
-  var upperCase = __078293c4a2a3404fae99bd9c4a7e7553
-  var sentenceCase = __b51900f4bff5c5c10c0aa5153f4cd77b
+  var upperCase = __0e9763547c35ca767133db3ffe6f5768
+  var sentenceCase = __956a4dd603b950c9910478a46703d8af
   
   /**
    * Camel case a string.
@@ -246,7 +246,7 @@
   return module.exports;
 }).call(this);
 // src/index.js
-(typeof window === 'undefined' ? global : window).__33e1b544e80a0fd100d25f6ec4f002ef = (function () {
+(typeof window === 'undefined' ? global : window).__be9e5608fb3c4ab570dde90320f15389 = (function () {
   var module = {
     exports: {}
   };
@@ -260,7 +260,7 @@
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
   
-  var _camelCase = __221c35969ee6d0a579bc8312fe2ef67c;
+  var _camelCase = __309f4b8fba2bbb751831827d61a7c20d;
   
   var _camelCase2 = _interopRequireDefault(_camelCase);
   
@@ -295,13 +295,20 @@
         return React.createElement(container);
       },
       renderChildren: function renderChildren(props) {
+        // Create the React render tree on the content node.
+        ReactDOM.render(React.createElement(container, null, props.children), this._realContentNode);
+  
         // Apply the new content to the custom element and let it handle it.
-        this._realCustomElement[content] = props.children;
+        this._realCustomElement[content] = this._realContentNode;
   
         // Passes on all non-react-special props to the custom element.
         setCustomElementProps(this._realCustomElement, props);
       },
       componentDidMount: function componentDidMount() {
+        // The real content node is the node that will act as the new React
+        // render tree and will house the children.
+        this._realContentNode = document.createElement(container);
+  
         // The real custom element is the component that we want to contain the
         // new render tree as its content.
         this._realCustomElement = CustomElement(makeCustomElementProps(this.props));
@@ -331,7 +338,7 @@
   return module.exports;
 }).call(this);
 // src/global.js
-(typeof window === 'undefined' ? global : window).__70dc37d5a75c923c928d3e7477cb22bb = (function () {
+(typeof window === 'undefined' ? global : window).__f8cf02f3ef4af57fab446e9f8f87d38b = (function () {
   var module = {
     exports: {}
   };
@@ -341,7 +348,7 @@
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
   
-  var _index = __33e1b544e80a0fd100d25f6ec4f002ef;
+  var _index = __be9e5608fb3c4ab570dde90320f15389;
   
   var _index2 = _interopRequireDefault(_index);
   
