@@ -281,37 +281,57 @@
     });
   }
   
+  function getDefaultProps(properties) {
+    var defaults = {};
+    Object.keys(properties).forEach(function (p) {
+      defaults[p] = properties[p]['default'];
+    });
+    return defaults;
+  }
+  
   exports['default'] = function (CustomElement) {
     var opts = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
   
     var React = opts.React || window.React;
     var ReactDOM = opts.ReactDOM || window.ReactDOM;
     var container = opts.container || 'div';
-    var content = opts.property || 'content';
+    var defaultProps = getDefaultProps(CustomElement.properties);
+  
     var ReactClass = React.createClass({
       displayName: 'ReactClass',
   
+      getDefaultProps: function getDefaultProps() {
+        return Object.assign(defaultProps, {
+          handlePropertyChange: function handlePropertyChange(e, props) {
+            debugger;
+            props[e.data.name] = e.data.newValue;
+          }
+        });
+      },
       render: function render() {
         return React.createElement(container);
       },
       renderChildren: function renderChildren(props) {
-        // Create the React render tree on the content node.
-        ReactDOM.render(React.createElement(container, null, props.children), this._realContentNode);
-  
-        // Apply the new content to the custom element and let it handle it.
-        this._realCustomElement[content] = this._realContentNode;
+        // Render the component in the new tree
+        ReactDOM.render(React.createElement(container, null, props.children), this._realCustomElement);
   
         // Passes on all non-react-special props to the custom element.
         setCustomElementProps(this._realCustomElement, props);
       },
       componentDidMount: function componentDidMount() {
-        // The real content node is the node that will act as the new React
-        // render tree and will house the children.
-        this._realContentNode = document.createElement(container);
+        var props = this.props;
   
         // The real custom element is the component that we want to contain the
         // new render tree as its content.
-        this._realCustomElement = CustomElement(makeCustomElementProps(this.props));
+        this._realCustomElement = CustomElement(makeCustomElementProps(props));
+  
+        // Listen for custom element changes and cancel them to make a stateless component
+        this._realCustomElement.addEventListener('property-change', function (e) {
+          if (props.handlePropertyChange) {
+            props.handlePropertyChange(e, props);
+            e.preventDefault();
+          }
+        });
   
         // The real portal node is this node which we will be appending the real
         // custom element to.
