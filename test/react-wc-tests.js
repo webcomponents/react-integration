@@ -184,23 +184,7 @@ describe('react-integration;', function () {
     function makeReactComponent (tagName) {
       var webComponentConstructor = skate(tagName, {
         render: function (elem) {
-          elem.innerHTML = '<div class="parent"><div class="content"></div></div>';
-        },
-        properties: {
-          content: {
-            get: function content (elem) {
-              return elem.querySelector('.content').firstChild;
-            },
-
-            set: function content (elem, changeData) {
-              const container = elem.querySelector('.content');
-              const reactTree = changeData.newValue;
-              container.innerHTML = '';
-              if (reactTree) {
-                container.appendChild(reactTree);
-              }
-            }
-          }
+          elem.innerHTML = '<div class="initial-content"></div>';
         }
       });
 
@@ -210,7 +194,7 @@ describe('react-integration;', function () {
     const tagName = helperElement('x-terminal-text').safe;
     const ReactComponent = makeReactComponent(tagName);
 
-    it('> DOM element): content is redirected to the correct container', function () {
+    it('> DOM element): content is rendered directly to the container', function () {
       renderApp(
         React.createClass({
           render: function () {
@@ -225,13 +209,10 @@ describe('react-integration;', function () {
 
       const componentContents = document.getElementById('user-inserted-contents');
       const reactRoot = componentContents.parentNode;
-      const reactRootContainer = reactRoot.parentNode;
-      const webComponentContent = reactRootContainer.parentNode;
 
       expect(ReactTestUtils.isDOMComponent(componentContents)).to.equal(true, 'component contents');
       expect(isReactRoot(reactRoot)).to.equal(true, 'react root');
-      expect(reactRootContainer.tagName).to.equal('DIV', 'react root container');
-      expect(webComponentContent.className).to.equal('content', 'web component content');
+      expect(reactRoot.parentNode.tagName.indexOf('-')).to.not.equal(-1, 'web component');
     });
 
     it('> DOM element): properties are passed to the wrapped React component', function () {
