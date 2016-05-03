@@ -32,7 +32,7 @@
     "react-addons-test-utils": "^0.14.3",
     "react-dom": "^0.14.3",
     "skatejs": "^0.14.3",
-    "skatejs-build": "skatejs/build#22dc0e2",
+    "skatejs-build": "skatejs/build#e765ea2d",
     "webcomponents.js": "0.7.22"
   },
   "peerDependencies": {
