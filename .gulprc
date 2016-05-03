@@ -1,3 +1,11 @@
 {
-  "base": "node_modules/skatejs-build/task"
+  "base": "node_modules/skatejs-build/task",
+  "unit": {
+    "files": [
+      "test/setup.js",
+      "node_modules/webcomponents.js/MutationObserver.js",
+      "node_modules/webcomponents.js/CustomElements.js"
+    ],
+    "skipUmd": "true"
+  }
 }
