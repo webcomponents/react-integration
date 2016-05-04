@@ -4,9 +4,6 @@
   "description": "Use custom elements in your React components without resorting to hacks.",
   "main": "lib/index.js",
   "jsnext:main": "src/index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/skatejs/react-integration.git"
@@ -35,9 +32,17 @@
     "react-addons-test-utils": "^0.14.3",
     "react-dom": "^0.14.3",
     "skatejs": "^0.14.3",
-    "skatejs-build": "skatejs/build#e4a442f"
+    "skatejs-build": "skatejs/build#0c6108cb",
+    "webcomponents.js": "0.7.22"
   },
   "peerDependencies": {
     "react": ">=0.14.0"
+  },
+  "scripts": {
+    "build": "gulp build",
+    "lint": "gulp lint",
+    "release": "gulp release",
+    "test": "gulp test",
+    "test-watch": "gulp test-watch"
   }
 }
