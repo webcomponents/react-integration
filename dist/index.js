@@ -310,7 +310,7 @@ var api = Object.freeze({
   for (var name in api) {
     main[name] = api[name];
   }
-  main.version = '0.0.2';
+  main.version = '0.1.0';
 
   return main;
 
