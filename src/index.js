@@ -1,81 +1,68 @@
-import camelCase from 'camel-case';
+import assign from 'object-assign';
 
-function makeCustomElementProps (props) {
-  let customElementProps = {};
-  Object.keys(props).forEach(function (key) {
-    if (key !== 'children') {
-      customElementProps[key] = props[key];
+function makeStateless(comp, node, props, opts) {
+  const propChangeHandler = props[opts.propChangeHandler];
+  node.addEventListener(opts.propChangeEvent, function (e) {
+    if (propChangeHandler) {
+      propChangeHandler.call(comp, e);
+      e.preventDefault();
     }
   });
-
-  return customElementProps;
 }
 
-function setCustomElementProps (customElement, props) {
-  Object.keys(makeCustomElementProps(props)).forEach(function (key) {
-    customElement[key] = props[key];
-  });
+function syncEvent(node, eventName, newEventHandler) {
+  const eventStore = node.__events || (node.__events = {});
+  const oldEventHandler = eventStore[eventName];
+
+  // Remove old listener so they don't double up.
+  if (oldEventHandler) {
+    node.removeEventListener(eventName, oldEventHandler);
+  }
+
+  // Bind new listener.
+  if (newEventHandler) {
+    node.addEventListener(eventName, eventStore[eventName] = function (e) {
+      newEventHandler.call(this, e);
+    });
+  }
 }
 
-function getDefaultProps (properties) {
-  let defaults = {};
-  Object.keys(properties).forEach(function (p) {
-    defaults[p] = properties[p].default;
-  });
-  return defaults;
-}
+const defaults = {
+  propChangeEvent: 'prop-change',
+  propChangeHandler: 'propChangeHandler',
+  React: window.React,
+  ReactDOM: window.ReactDOM
+};
 
-export default function (CustomElement, opts = {}) {
-  const React = opts.React || window.React;
-  const ReactDOM = opts.ReactDOM || window.ReactDOM;
-  const container = opts.container || 'div';
-  const defaultProps = getDefaultProps(CustomElement.properties);
+export default function(CustomElement, opts) {
+  opts = assign(defaults, opts);
+  const displayName = (new CustomElement()).tagName;
+  const { React, ReactDOM } = opts;
 
-  const ReactClass = React.createClass({
-    getDefaultProps() {
-      return defaultProps;
+  return React.createClass({
+    displayName,
+    render() {
+      return React.createElement(displayName, null, this.props.children);
     },
-    render () {
-      return React.createElement(container);
-    },
-    renderChildren (props) {
-      // Render the component in the new tree
-      ReactDOM.render(React.createElement(container, null, props.children), this._realCustomElement);
-
-      // Passes on all non-react-special props to the custom element.
-      setCustomElementProps(this._realCustomElement, props);
-    },
-    componentDidMount () {
+    componentDidMount() {
+      const node = ReactDOM.findDOMNode(this);
       const props = this.props;
+      makeStateless(this, node, props, opts);
+      this.componentWillReceiveProps(props);
+    },
+    componentWillReceiveProps(props) {
+      const node = ReactDOM.findDOMNode(this);
+      Object.keys(props).forEach(name => {
+        if (name === 'children') {
+          return;
+        }
 
-      // The real custom element is the component that we want to contain the
-      // new render tree as its content.
-      this._realCustomElement = CustomElement(makeCustomElementProps(props));
-
-      // Listen for custom element changes and cancel them to make a stateless component
-      this._realCustomElement.addEventListener('property-change', function (e) {
-        if (props.handlePropertyChange) {
-          props.handlePropertyChange(e, props);
-          e.preventDefault();
+        if (name.indexOf('on') === 0) {
+          syncEvent(node, name.substring(2), props[name]);
+        } else {
+          node[name] = props[name];
         }
       });
-
-      // The real portal node is this node which we will be appending the real
-      // custom element to.
-      this._realPortalNode = ReactDOM.findDOMNode(this);
-
-      // The custom element becomes the content of this node.
-      this._realPortalNode.appendChild(this._realCustomElement);
-
-      // Now kick off the rendering of the custom element and react tree.
-      this.renderChildren(this.props);
-    },
-    componentWillReceiveProps (props) {
-      this.renderChildren(props);
     }
   });
-
-  ReactClass.displayName = camelCase(CustomElement.id);
-
-  return ReactClass;
 }
