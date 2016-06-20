@@ -27,22 +27,14 @@
   "devDependencies": {
     "eslint": "^1.10.1",
     "eslint-plugin-react": "^3.11.3",
-    "gulp": "^3.9.0",
     "react": "^0.14.3",
     "react-addons-test-utils": "^0.14.3",
     "react-dom": "^0.14.3",
     "skatejs": "^0.14.3",
-    "skatejs-build": "skatejs/build#0c6108cb",
+    "skatejs-build": "skatejs/build#8eda8a2",
     "webcomponents.js": "0.7.22"
   },
   "peerDependencies": {
     "react": ">=0.14.0"
-  },
-  "scripts": {
-    "build": "gulp build",
-    "lint": "gulp lint",
-    "release": "gulp release",
-    "test": "gulp test",
-    "test-watch": "gulp test-watch"
   }
 }
