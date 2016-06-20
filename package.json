@@ -1,12 +1,11 @@
 {
   "name": "skatejs-react-integration",
-  "version": "0.1.0",
   "description": "Use custom elements in your React components without resorting to hacks.",
   "main": "lib/index.js",
   "jsnext:main": "src/index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/skatejs/react-integration.git"
+    "url": "https://github.com/skatejs/react-integration.git"
   },
   "keywords": [
     "react",
@@ -32,9 +31,13 @@
     "react-dom": "^0.14.3",
     "skatejs": "^0.14.3",
     "skatejs-build": "^2.1.0",
-    "webcomponents.js": "0.7.22"
+    "webcomponents.js": "0.7.22",
+    "semantic-release": "^4.3.5"
   },
   "peerDependencies": {
     "react": ">=0.14.0"
+  },
+  "scripts": {
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   }
 }
