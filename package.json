@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/skatejs/react-integration#readme",
   "dependencies": {
-    "camel-case": "^1.2.0"
+    "object-assign": "^4.1.0"
   },
   "devDependencies": {
     "eslint": "^1.10.1",
