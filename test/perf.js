@@ -1,0 +1,3 @@
+describe('skatejs-react-integration', () => {
+
+});

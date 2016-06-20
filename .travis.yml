@@ -1,18 +1,25 @@
 sudo: false
 language: node_js
+node_js: stable
 cache:
   directories:
     - node_modules
 notifications:
   email: false
-node_js:
-  - '4'
-before_install:
-  - npm i -g npm@^2.0.0
 before_script:
   - npm prune
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+  - npm install
+script:
+  - sk-bundle
+  - if [ "${TRAVIS_SECURE_ENV_VARS}" = "true" ]; then
+    npm test -- --saucelabs;
+    else
+    npm test -- --browsers Firefox;
+    fi
 after_success:
-  - npm run semantic-release
+  - sk-release
 branches:
   except:
     - /^v\d+\.\d+\.\d+$/
