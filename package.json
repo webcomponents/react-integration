@@ -40,5 +40,8 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
+  },
+  "scripts": {
+    "test": "sk-tests"
   }
 }
