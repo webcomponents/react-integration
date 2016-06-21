@@ -2,7 +2,7 @@ import reactify from '../../src/index';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-describe('events', () => {
+describe('custom events', () => {
   it('should bind built-in events', () => {
     let count = 0;
     const Comp = reactify(document.registerElement('x-custom-event-1', {
@@ -15,8 +15,11 @@ describe('events', () => {
       }),
     }), { React, ReactDOM });
     const comp = ReactDOM.render(<Comp onclick={() => count++} />, window.fixture);
-    ReactDOM.findDOMNode(comp).trigger();
-    expect(count).to.equal(1);
+
+    setTimeout(() => {
+      ReactDOM.findDOMNode(comp).trigger();
+      expect(count).to.equal(1);
+    }, 1);
   });
 
   it('should bind custom events', () => {
@@ -31,7 +34,10 @@ describe('events', () => {
       }),
     }), { React, ReactDOM });
     const comp = ReactDOM.render(<Comp ontest={() => count++} />, window.fixture);
-    ReactDOM.findDOMNode(comp).trigger();
-    expect(count).to.equal(1);
+    
+    setTimeout(() => {
+      ReactDOM.findDOMNode(comp).trigger();
+      expect(count).to.equal(1);
+    }, 1);
   });
 });
