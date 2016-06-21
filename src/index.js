@@ -7,6 +7,7 @@ const defaults = {
 };
 
 function syncEvent(node, eventName, newEventHandler) {
+  const eventNameLc = eventName.toLowerCase();
   const eventStore = node.__events || (node.__events = {});
   const oldEventHandler = eventStore[eventName];
 
@@ -17,7 +18,7 @@ function syncEvent(node, eventName, newEventHandler) {
 
   // Bind new listener.
   if (newEventHandler) {
-    node.addEventListener(eventName, eventStore[eventName] = function handler(e) {
+    node.addEventListener(eventNameLc, eventStore[eventName] = function handler(e) {
       newEventHandler.call(this, e);
     });
   }
