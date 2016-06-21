@@ -1,128 +1,83 @@
 # React Integration
 
-Use Custom Elements in your React components without resorting to hacks.
+Converts web components into React components so that you can use them as first class citizens in your React components.
 
-## Why
+- Web components become lexically scoped so you can use them as tag names in JSX.
+- Listen for custom events triggered from web components declaratively using the standard `on*` syntax.
+- Passes React `props` to web components as properties instead of attributes.
+- Works with any web component library that uses a standard native custom element constructor, not just Skate or native web components.
 
-For whatever reason you want to be able to use Custom Elements within your React components and be able to pass content to the Custom Elements. For example:
+## Usage
 
-```js
-const CustomElement = document.registerElement('custom-element', {
-  prototype: Object.create(HTMLElement.prototype, {
-    createdCallback () {
-      // Just going to remove the elements but it's likely one would template
-      // the elements and if it moves them, it would have the same effect.
-      this.innerHTML = '';
-    }
-  })
-});
-
-const ReactComponent = React.createClass({
-  render () {
-    return (
-      <div>
-        <custom-element>
-          <div>
-            <AnotherReactComponent />
-          </div>
-        </custom-element>
-      </div>
-    );
-  }
-});
-```
-
-When `<custom-eleent>` removes its content, React loses track of the nodes it originally rendered and throws an error when the state changes.
-
-## How
-
-To get around this, we supply a function that will wrap the custom element in a React component that creates a new diff tree. This method is based on a React Training post by Ryan Florence about [Portals](https://github.com/ryanflorence/react-training/blob/gh-pages/lessons/05-wrapping-dom-libs.md#portals).
-
-The convention is this:
-
-- Call a function passing in your custom element constructor.
-- The React component passes the real DOM node of the new render tree to a property.
-- You do the rest.
-
-
-### Static example
-
-The following example simply takes the `content` property value and renders it inside a div.
+Web components are converted to React components simply by passing them to the main react-integration function:
 
 ```js
 import reactify from 'skatejs-react-integration';
 
-const CustomElement = skate('custom-element', {
-  render: function (elem) {
-    const div = document.createElement('div');
-    div.appendChild(elem.content);
-    elem.appendChild(div);
-  }
-});
+// Create your constructor.
+const MyComponent = class MyComponent extends HTMLElement {};
 
+// Define your custom element.
+const CustomElement = window.customElements.define('my-component', MyComponent);
+
+// Reactify it!
 export default reactify(CustomElement);
 ```
 
-
-### Updating example
-
-This will not update if the state changes, however. To do that we need to define a setter for the `content` property.
+Usage with [SkateJS](https://github.com/skatejs/skatejs) is pretty much the same, Skate just makes defining your custom element easier:
 
 ```js
-skate('custom-element', {
-  properties: {
-    content: {
-      set (elem, data) {
-        const container = elem.children[0];
-        const reactTree = data.newValue;
-        container.innerHTML = '';
-        if (reactTree) {
-          container.appendChild(reactTree);
-        }
-      }
-    }
-  },
-  render: function (elem) {
-    const div = document.createElement('div');
-    div.appendChild(elem.content);
-    elem.appendChild(div);
-  }
+import reactify from 'skatejs-react-integration';
+
+export default reactify(skate('my-component', {}));
+```
+
+### Lexical scoping
+
+When you convert a web component to a React component, it returns the React component. Therefore you can use it in your JSX just like any other React component.
+
+```js
+const ReactComponent = reactify(WebComponent);
+ReactDOM.render(<ReactComponent />, container);
+```
+
+### Custom events
+
+Out of the box, React only works with built-in events. By using this integration layer, you can listen for custom events on a web component.
+
+```js
+<MyComponent oncustomevent={handler} />
+```
+
+Now when `customevent` is emitted from the web component, your `handler` will get triggered.
+
+### Web component properties
+
+When you pass down props to the web component, instead of setting attributes like React normally does for DOM elements, it will set all `props` as properties on your web component. This is useful because you can now pass complex data to your web components.
+
+```js
+<MyComponent items={[ 'item1', 'item2' ]} callback={function() {}} />
+```
+
+### Children
+
+If your web component renders content to itself, make sure you're using Shadow DOM and that you render it to the shadow root. If you do this `children` and props get passed down as normal and React won't see your content in the shadow root.
+
+### Injecting React and ReactDOM
+
+By default, the React integration will look for `React` and `ReactDOM` on the window. However, this isn't the case for all apps. If you're using ES2015 modules or CommonJS, you'll have to inject them into the reactify function as options:
+
+```js
+import reactify from 'skatejs-react-integration';
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+export default reactify(..., {
+  React,
+  ReactDOM
 });
 ```
 
-You'll notice that since the diff tree ends in the ancestor tree of `<custom-element>` and the new tree begins at the React tree that was passed in to `content`, we are smashing the DOM at the `container` level. For smaller components this may not matter, but if your component is expecting updates then it'd be good to take accessibility and DOM performance into consideration.
+### Multiple React versions
 
-
-### Diffing example
-
-In order to diff and patch the real DOM tree, we'll need something that can work with real DOM, not vDOM. In the next example we'll use [skatejs-dom-diff](https://github.com/skatejs/dom-diff).
-
-```js
-skate('custom-element', {
-  properties: {
-    content: {
-      set: skate.render
-    }
-  },
-  render: skateDomDiff.render(function (elem) {
-    const div = document.createElement('div');
-    div.appendChild(elem.content);
-    return div;
-  })
-});
-```
-
-What's nice about using `skatejs-dom-diff` is that it also works with virtual DOM (or a mixture of both) and it comes with a light-weight virtual DOM interface bundled with it. If you wanted to use the previous example with JSX, all you'd need to do is the following.
-
-```js
-skate('custom-element', {
-  properties: {
-    content: {
-      set: skate.render
-    }
-  },
-  render: skateDomDiff.render(function (elem, React) {
-    return <div>{elem.content}</div>;
-  })
-});
-```
+The integration sets a peer-dependency on React so you know what it's compatible with. That said, you still need to be mindful that the version of React you provide to the integration layer is correct.
