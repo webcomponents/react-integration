@@ -25,7 +25,7 @@ var standardConfig = {
       loader: 'babel-loader',
       test: /\.js$/,
       query: {
-        presets: 'babel-preset-es2015'
+        presets: ['babel-preset-es2015', 'babel-preset-react']
       }
     }]
   },

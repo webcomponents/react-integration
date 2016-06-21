@@ -1,14 +1,10 @@
 import assign from 'object-assign';
+import pascalCase from 'pascal-case';
 
-function makeStateless(comp, node, props, opts) {
-  const propChangeHandler = props[opts.propChangeHandler];
-  node.addEventListener(opts.propChangeEvent, function (e) {
-    if (propChangeHandler) {
-      propChangeHandler.call(comp, e);
-      e.preventDefault();
-    }
-  });
-}
+const defaults = {
+  React: window.React,
+  ReactDOM: window.ReactDOM,
+};
 
 function syncEvent(node, eventName, newEventHandler) {
   const eventStore = node.__events || (node.__events = {});
@@ -21,35 +17,30 @@ function syncEvent(node, eventName, newEventHandler) {
 
   // Bind new listener.
   if (newEventHandler) {
-    node.addEventListener(eventName, eventStore[eventName] = function (e) {
+    node.addEventListener(eventName, eventStore[eventName] = function handler(e) {
       newEventHandler.call(this, e);
     });
   }
 }
 
-const defaults = {
-  propChangeEvent: 'prop-change',
-  propChangeHandler: 'propChangeHandler',
-  React: window.React,
-  ReactDOM: window.ReactDOM
-};
-
-export default function(CustomElement, opts) {
+export default function (CustomElement, opts) {
   opts = assign(defaults, opts);
-  const displayName = (new CustomElement()).tagName;
+  const tagName = (new CustomElement()).tagName;
+  const displayName = pascalCase(tagName);
   const { React, ReactDOM } = opts;
 
-  return React.createClass({
-    displayName,
-    render() {
-      return React.createElement(displayName, null, this.props.children);
-    },
+  return class extends React.Component {
+    static get displayName() {
+      return displayName;
+    }
+    static get propTypes() {
+      return {
+        children: React.PropTypes.any,
+      };
+    }
     componentDidMount() {
-      const node = ReactDOM.findDOMNode(this);
-      const props = this.props;
-      makeStateless(this, node, props, opts);
-      this.componentWillReceiveProps(props);
-    },
+      this.componentWillReceiveProps(this.props);
+    }
     componentWillReceiveProps(props) {
       const node = ReactDOM.findDOMNode(this);
       Object.keys(props).forEach(name => {
@@ -64,5 +55,8 @@ export default function(CustomElement, opts) {
         }
       });
     }
-  });
+    render() {
+      return React.createElement(tagName, null, this.props.children);
+    }
+  };
 }

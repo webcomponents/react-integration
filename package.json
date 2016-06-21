@@ -21,25 +21,20 @@
   },
   "homepage": "https://github.com/skatejs/react-integration#readme",
   "dependencies": {
-    "object-assign": "^4.1.0"
+    "object-assign": "^4.1.0",
+    "pascal-case": "^2.0.0"
   },
   "devDependencies": {
     "cz-conventional-changelog": "^1.1.6",
-    "eslint": "^1.10.1",
-    "eslint-plugin-react": "^3.11.3",
     "react": "^0.14.3",
     "react-addons-test-utils": "^0.14.3",
     "react-dom": "^0.14.3",
-    "semantic-release": "^4.3.5",
     "skatejs": "^0.14.3",
     "skatejs-build": "^4.0.0",
     "webcomponents.js": "0.7.22"
   },
   "peerDependencies": {
     "react": ">=0.14.0"
-  },
-  "scripts": {
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "config": {
     "commitizen": {
