@@ -4,7 +4,7 @@ module.exports = function (config) {
 
   // WebComponentsJS for testing native APIs in older browsers.
   config.files = [
-    'node_modules/webcomponents.js/webcomponents.js',
+    'node_modules/webcomponents.js/CustomElements.js',
   ].concat(config.files);
 
   // Ensure mobile browsers have enough time to run.

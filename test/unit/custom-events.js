@@ -3,26 +3,27 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 describe('custom events', () => {
-  it('should bind built-in events', () => {
+  it('should bind built-in events', done => {
     let count = 0;
     const Comp = reactify(document.registerElement('x-custom-event-1', {
       prototype: Object.create(HTMLElement.prototype, {
         trigger: {
           value() {
-            this.dispatchEvent(new MouseEvent('click'));
+            this.dispatchEvent(new CustomEvent('click'));
           },
         },
       }),
     }), { React, ReactDOM });
-    const comp = ReactDOM.render(<Comp onclick={() => count++} />, window.fixture);
+    const comp = ReactDOM.render(<Comp onClick={() => count++} />, window.fixture);
 
     setTimeout(() => {
       ReactDOM.findDOMNode(comp).trigger();
       expect(count).to.equal(1);
+      done();
     }, 1);
   });
 
-  it('should bind custom events', () => {
+  it('should bind custom events', done => {
     let count = 0;
     const Comp = reactify(document.registerElement('x-custom-event-2', {
       prototype: Object.create(HTMLElement.prototype, {
@@ -38,6 +39,7 @@ describe('custom events', () => {
     setTimeout(() => {
       ReactDOM.findDOMNode(comp).trigger();
       expect(count).to.equal(1);
+      done();
     }, 1);
   });
 });
