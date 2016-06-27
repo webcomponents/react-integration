@@ -17,7 +17,7 @@ function createComponent(name, done) {
         },
       },
     }),
-  }));
+  }), { React, ReactDOM });
 }
 
 describe('props', () => {

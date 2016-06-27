@@ -30,6 +30,10 @@ export default function (CustomElement, opts) {
   const displayName = pascalCase(tagName);
   const { React, ReactDOM } = opts;
 
+  if (!React || !ReactDOM) {
+    throw new Error('React and ReactDOM must be globally available or passed via opts.');
+  }
+
   return class extends React.Component {
     static get displayName() {
       return displayName;
