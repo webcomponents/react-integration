@@ -42,4 +42,28 @@ describe('custom events', () => {
       done();
     }, 1);
   });
+
+  it('should not duplicate handlers', done => {
+    let count = 0;
+    const Comp = reactify(document.registerElement('x-custom-event-3', {
+      prototype: Object.create(HTMLElement.prototype, {
+        trigger: {
+          value() {
+            this.dispatchEvent(new CustomEvent('test'));
+          },
+        },
+      }),
+    }), { React, ReactDOM });
+
+    const func = () => ++count;
+
+    // Using both ontest and onTest (case-sensitive) test case-sensitivity.
+    const comp = ReactDOM.render(<Comp ontest={func} onTest={func} />, window.fixture);
+
+    setTimeout(() => {
+      ReactDOM.findDOMNode(comp).trigger();
+      expect(count).to.equal(1);
+      done();
+    }, 1);
+  });
 });
