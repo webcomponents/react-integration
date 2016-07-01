@@ -9,16 +9,16 @@ const defaults = {
 function syncEvent(node, eventName, newEventHandler) {
   const eventNameLc = eventName.toLowerCase();
   const eventStore = node.__events || (node.__events = {});
-  const oldEventHandler = eventStore[eventName];
+  const oldEventHandler = eventStore[eventNameLc];
 
   // Remove old listener so they don't double up.
   if (oldEventHandler) {
-    node.removeEventListener(eventName, oldEventHandler);
+    node.removeEventListener(eventNameLc, oldEventHandler);
   }
 
   // Bind new listener.
   if (newEventHandler) {
-    node.addEventListener(eventNameLc, eventStore[eventName] = function handler(e) {
+    node.addEventListener(eventNameLc, eventStore[eventNameLc] = function handler(e) {
       newEventHandler.call(this, e);
     });
   }
