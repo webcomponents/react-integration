@@ -1,5 +1,5 @@
 import './unit/children';
-import './unit/custom-events';
+import './unit/events';
 import './unit/display-name';
 import './unit/errors';
 import './unit/prop-types';
