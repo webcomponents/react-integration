@@ -3,8 +3,17 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 describe('custom events', () => {
+  let count;
+
+  function inc() {
+    ++count;
+  }
+
+  beforeEach(() => {
+    count = 0;
+  });
+
   it('should bind built-in events', done => {
-    let count = 0;
     const Comp = reactify(document.registerElement('x-custom-event-1', {
       prototype: Object.create(HTMLElement.prototype, {
         trigger: {
@@ -14,7 +23,7 @@ describe('custom events', () => {
         },
       }),
     }), { React, ReactDOM });
-    const comp = ReactDOM.render(<Comp onClick={() => count++} />, window.fixture);
+    const comp = ReactDOM.render(<Comp onclick={inc} onClick={inc} />, window.fixture);
 
     setTimeout(() => {
       ReactDOM.findDOMNode(comp).trigger();
@@ -24,17 +33,16 @@ describe('custom events', () => {
   });
 
   it('should bind custom events', done => {
-    let count = 0;
     const Comp = reactify(document.registerElement('x-custom-event-2', {
       prototype: Object.create(HTMLElement.prototype, {
         trigger: {
           value() {
-            this.dispatchEvent(new CustomEvent('test'));
+            this.dispatchEvent(new CustomEvent('testing'));
           },
         },
       }),
     }), { React, ReactDOM });
-    const comp = ReactDOM.render(<Comp ontest={() => count++} />, window.fixture);
+    const comp = ReactDOM.render(<Comp ontesting={inc} onTestIng={inc} />, window.fixture);
     
     setTimeout(() => {
       ReactDOM.findDOMNode(comp).trigger();
@@ -44,12 +52,11 @@ describe('custom events', () => {
   });
 
   it('should not duplicate handlers', done => {
-    let count = 0;
     const Comp = reactify(document.registerElement('x-custom-event-3', {
       prototype: Object.create(HTMLElement.prototype, {
         trigger: {
           value() {
-            this.dispatchEvent(new CustomEvent('test'));
+            this.dispatchEvent(new CustomEvent('testing'));
           },
         },
       }),
@@ -58,7 +65,7 @@ describe('custom events', () => {
     const func = () => ++count;
 
     // Using both ontest and onTest (case-sensitive) test case-sensitivity.
-    const comp = ReactDOM.render(<Comp ontest={func} onTest={func} />, window.fixture);
+    const comp = ReactDOM.render(<Comp ontesting={func} onTestIng={func} />, window.fixture);
 
     setTimeout(() => {
       ReactDOM.findDOMNode(comp).trigger();

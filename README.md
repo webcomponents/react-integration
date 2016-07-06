@@ -41,15 +41,15 @@ const ReactComponent = reactify(WebComponent);
 ReactDOM.render(<ReactComponent />, container);
 ```
 
-### Custom events
+### Events
 
-Out of the box, React only works with built-in events. By using this integration layer, you can listen for custom events on a web component.
+Out of the box, React only works with built-in events. By using this integration layer, you can listen for both built-in and custom events using case-insensitive matching.
 
 ```js
-<MyComponent oncustomevent={handler} />
+<MyComponent oncustomevent={handler} onCustomEvent={handler} />
 ```
 
-Now when `customevent` is emitted from the web component, your `handler` will get triggered.
+Both will get triggered when `customevent` (lower-case) gets emitted.
 
 ### Web component properties
 
