@@ -58,4 +58,14 @@ describe('props', () => {
     const Comp = createComponentWithProp('test', (elem, value) => expect(value).to.equal('test'));
     ReactDOM.render(<Comp test="test" />, window.fixture);
   });
+
+  it('should work with rest/spread properties', () => {
+    const Comp = createComponentWithProp('test');
+    const rest = { style: { color: 'white' }, test: 'test' };
+    ReactDOM.render(<Comp className="test" {...rest} />, window.fixture);
+    const elem = window.fixture.firstChild;
+    expect(elem.getAttribute('class')).to.equal('test');
+    expect(elem.style.color).to.equal('white');
+    expect(elem.test).to.equal('test');
+  });
 });
