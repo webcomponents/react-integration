@@ -36,6 +36,11 @@ describe('props', () => {
     ReactDOM.render(<Comp test="test" />, window.fixture);
   });
 
+  it('should set style as an attribute', () => {
+    const Comp = createComponent('style', elem => expect(elem.style.display).to.equal('block'));
+    ReactDOM.render(<Comp style={{ display: 'block' }} />, window.fixture);
+  });
+
   it('should set properties for anything else', () => {
     const Comp = createComponent('test', (elem, value) => expect(value).to.equal('test'));
     ReactDOM.render(<Comp test="test" />, window.fixture);
