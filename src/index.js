@@ -55,6 +55,8 @@ export default function (CustomElement, opts) {
 
         if (name.indexOf('on') === 0) {
           syncEvent(node, name.substring(2), props[name]);
+        } else if (name === 'style') {
+          node.setAttribute('style', props[name]);
         } else {
           node[name] = props[name];
         }
