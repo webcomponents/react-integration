@@ -41,6 +41,7 @@ export default function (CustomElement, opts) {
     static get propTypes() {
       return {
         children: React.PropTypes.any,
+        style: React.PropTypes.any,
       };
     }
     componentDidMount() {
@@ -49,7 +50,7 @@ export default function (CustomElement, opts) {
     componentWillReceiveProps(props) {
       const node = ReactDOM.findDOMNode(this);
       Object.keys(props).forEach(name => {
-        if (name === 'children') {
+        if (name === 'children' || name === 'style') {
           return;
         }
 
@@ -61,7 +62,7 @@ export default function (CustomElement, opts) {
       });
     }
     render() {
-      return React.createElement(tagName, null, this.props.children);
+      return React.createElement(tagName, { style: this.props.style }, this.props.children);
     }
   };
 }
