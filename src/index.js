@@ -7,7 +7,7 @@ const defaults = {
 };
 
 function syncEvent(node, eventName, newEventHandler) {
-  const eventNameLc = eventName.charAt(0).toLowerCase() + eventName.substring(1);
+  const eventNameLc = eventName[0].toLowerCase() + eventName.substring(1);
   const eventStore = node.__events || (node.__events = {});
   const oldEventHandler = eventStore[eventNameLc];
 

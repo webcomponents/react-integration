@@ -67,7 +67,7 @@ describe('custom events', () => {
     }, 1);
   });
 
-  it('should handle cases correctly', done => {
+  it('should preserve declared casing', done => {
     let count = 0;
     const Comp = reactify(document.registerElement('x-custom-event-4', {
       prototype: Object.create(HTMLElement.prototype, {
@@ -81,7 +81,6 @@ describe('custom events', () => {
 
     const func = () => ++count;
 
-    // Using both ontest and onTest (case-sensitive) test case-sensitivity.
     const comp = ReactDOM.render(<Comp ontestThis={func} onTestThis={func} />, window.fixture);
 
     setTimeout(() => {
@@ -105,7 +104,6 @@ describe('custom events', () => {
 
     const func = () => ++count;
 
-    // Using both ontest and onTest (case-sensitive) test case-sensitivity.
     const comp = ReactDOM.render(<Comp ontest-This={func} onTest-this={func} />, window.fixture);
 
     setTimeout(() => {
