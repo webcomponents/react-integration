@@ -35,7 +35,7 @@ describe('custom events', () => {
       }),
     }), { React, ReactDOM });
     const comp = ReactDOM.render(<Comp ontest={() => count++} />, window.fixture);
-    
+
     setTimeout(() => {
       ReactDOM.findDOMNode(comp).trigger();
       expect(count).to.equal(1);
@@ -59,6 +59,52 @@ describe('custom events', () => {
 
     // Using both ontest and onTest (case-sensitive) test case-sensitivity.
     const comp = ReactDOM.render(<Comp ontest={func} onTest={func} />, window.fixture);
+
+    setTimeout(() => {
+      ReactDOM.findDOMNode(comp).trigger();
+      expect(count).to.equal(1);
+      done();
+    }, 1);
+  });
+
+  it('should preserve declared casing', done => {
+    let count = 0;
+    const Comp = reactify(document.registerElement('x-custom-event-4', {
+      prototype: Object.create(HTMLElement.prototype, {
+        trigger: {
+          value() {
+            this.dispatchEvent(new CustomEvent('testThis'));
+          },
+        },
+      }),
+    }), { React, ReactDOM });
+
+    const func = () => ++count;
+
+    const comp = ReactDOM.render(<Comp ontestThis={func} onTestThis={func} />, window.fixture);
+
+    setTimeout(() => {
+      ReactDOM.findDOMNode(comp).trigger();
+      expect(count).to.equal(1);
+      done();
+    }, 1);
+  });
+
+  it('should handle dashes correctly', done => {
+    let count = 0;
+    const Comp = reactify(document.registerElement('x-custom-event-5', {
+      prototype: Object.create(HTMLElement.prototype, {
+        trigger: {
+          value() {
+            this.dispatchEvent(new CustomEvent('test-this'));
+          },
+        },
+      }),
+    }), { React, ReactDOM });
+
+    const func = () => ++count;
+
+    const comp = ReactDOM.render(<Comp ontest-This={func} onTest-this={func} />, window.fixture);
 
     setTimeout(() => {
       ReactDOM.findDOMNode(comp).trigger();
