@@ -1,10 +1,19 @@
 import assign from 'object-assign';
 import pascalCase from 'pascal-case';
 
-const defaults = {
-  React: window.React,
-  ReactDOM: window.ReactDOM,
-};
+const defaults = {};
+
+try {
+  defaults.React = require('react');
+} catch (e) {
+  defaults.React = window.React;
+}
+
+try {
+  defaults.ReactDOM = require('react-dom');
+} catch (e) {
+  defaults.ReactDOM = window.ReactDOM;
+}
 
 function syncEvent(node, eventName, newEventHandler) {
   const eventNameLc = eventName[0].toLowerCase() + eventName.substring(1);
@@ -31,7 +40,7 @@ export default function (CustomElement, opts) {
   const { React, ReactDOM } = opts;
 
   if (!React || !ReactDOM) {
-    throw new Error('React and ReactDOM must be globally available or passed via opts.');
+    throw new Error('React and ReactDOM must be dependencies, globally on your `window` object or passed via opts.');
   }
 
   return class extends React.Component {

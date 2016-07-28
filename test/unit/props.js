@@ -6,7 +6,7 @@ let x = 0;
 function createComponentWithOpts(opts) {
   return reactify(document.registerElement(`x-props-${x++}`, {
     prototype: Object.create(HTMLElement.prototype, opts),
-  }), { React, ReactDOM });
+  }));
 }
 function createComponentWithProp(name, done) {
   return createComponentWithOpts({
@@ -38,7 +38,7 @@ describe('props', () => {
     const elem = window.fixture.firstChild;
     expect(elem.getAttribute('class')).to.equal('test');
   });
-  
+
   it('should not set children', () => {
     const Comp = createComponentWithProp('children', () => { throw new Error('set children'); });
     ReactDOM.render(<Comp><div /></Comp>, window.fixture);
