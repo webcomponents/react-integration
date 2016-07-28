@@ -54,7 +54,7 @@ export default function (CustomElement, opts) {
           return;
         }
 
-        if (name.indexOf('on') === 0) {
+        if (name.indexOf('on') === 0 && name[2] === name[2].toUpperCase()) {
           syncEvent(node, name.substring(2), props[name]);
         } else {
           node[name] = props[name];
