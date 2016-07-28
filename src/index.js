@@ -49,9 +49,9 @@ export default function (CustomElement, opts) {
     }
     componentWillReceiveProps(props) {
       const node = ReactDOM.findDOMNode(this);
-      Object.keys(props).forEach(name => {
+      for (var name in props) {
         if (name === 'children' || name === 'style') {
-          return;
+          continue;
         }
 
         if (name.indexOf('on') === 0) {
@@ -59,7 +59,7 @@ export default function (CustomElement, opts) {
         } else {
           node[name] = props[name];
         }
-      });
+      }
     }
     render() {
       return React.createElement(tagName, { style: this.props.style }, this.props.children);
