@@ -1,19 +1,12 @@
 import assign from 'object-assign';
 import pascalCase from 'pascal-case';
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-const defaults = {};
-
-try {
-  defaults.React = require('react');
-} catch (e) {
-  defaults.React = window.React;
-}
-
-try {
-  defaults.ReactDOM = require('react-dom');
-} catch (e) {
-  defaults.ReactDOM = window.ReactDOM;
-}
+const defaults = {
+  React: React || window.React,
+  ReactDOM: ReactDOM || window.ReactDOM,
+};
 
 function syncEvent(node, eventName, newEventHandler) {
   const eventNameLc = eventName[0].toLowerCase() + eventName.substring(1);
