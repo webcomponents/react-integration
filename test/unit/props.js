@@ -22,6 +22,26 @@ function createComponentWithProp(name, done) {
     },
   });
 }
+function createComponentWithPropOnProto(name, done) {
+  const proto = function() {};
+
+  proto.prototype = Object.create(HTMLElement.prototype, {
+    [name]: {
+      get() {
+        return 'test';
+      },
+      set(value) {
+        if (done) {
+          done(this, value);
+        }
+      },
+    },
+  });
+
+  return reactify(document.registerElement(`x-props-${x++}`, {
+    prototype: Object.create(proto.prototype),
+  }), { React, ReactDOM });
+}
 
 describe('props', () => {
   it('should set style (object)', () => {
@@ -38,7 +58,7 @@ describe('props', () => {
     const elem = window.fixture.firstChild;
     expect(elem.getAttribute('class')).to.equal('test');
   });
-  
+
   it('should not set children', () => {
     const Comp = createComponentWithProp('children', () => { throw new Error('set children'); });
     ReactDOM.render(<Comp><div /></Comp>, window.fixture);
@@ -56,6 +76,11 @@ describe('props', () => {
 
   it('should set properties for anything else', () => {
     const Comp = createComponentWithProp('test', (elem, value) => expect(value).to.equal('test'));
+    ReactDOM.render(<Comp test="test" />, window.fixture);
+  });
+
+  it('should set properties on prototype for anything else', () => {
+    const Comp = createComponentWithPropOnProto('test', (elem, value) => expect(value).to.equal('test'));
     ReactDOM.render(<Comp test="test" />, window.fixture);
   });
 
