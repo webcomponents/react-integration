@@ -38,7 +38,7 @@ describe('props', () => {
     const elem = window.fixture.firstChild;
     expect(elem.getAttribute('class')).to.equal('test');
   });
-  
+
   it('should not set children', () => {
     const Comp = createComponentWithProp('children', () => { throw new Error('set children'); });
     ReactDOM.render(<Comp><div /></Comp>, window.fixture);
@@ -46,7 +46,7 @@ describe('props', () => {
 
   it('should not set events', () => {
     const Comp = createComponentWithProp('oncustomevent', () => { throw new Error('set oncustomevent'); });
-    ReactDOM.render(<Comp oncustomevent="test" />, window.fixture);
+    ReactDOM.render(<Comp onCustomevent="test" />, window.fixture);
   });
 
   it('should not set attributes', () => {
