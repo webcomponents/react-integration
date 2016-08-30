@@ -46,17 +46,26 @@ ReactDOM.render(<ReactComponent />, container);
 Out of the box, React only works with built-in events. By using this integration layer, you can listen for custom events on a web component.
 
 ```js
-<MyComponent oncustomevent={handler} />
+// in MyComponent
+var event = new Event('customevent');
+elem.dispatchEvent(event);
+
+// after reactified
+<ReactComponent onCustomevent={handler} />
 ```
 
-Now when `customevent` is emitted from the web component, your `handler` will get triggered.
+Now when `customevent` is emitted from the web component, your `handler` on `ReactComponent` will get triggered.
 
 ### Web component properties
 
 When you pass down props to the web component, instead of setting attributes like React normally does for DOM elements, it will set all `props` as properties on your web component. This is useful because you can now pass complex data to your web components.
 
 ```js
-<MyComponent items={[ 'item1', 'item2' ]} callback={function() {}} />
+// reactified component
+<ReactComponent items={[ 'item1', 'item2' ]} callback={function() {}} />
+
+// in MyComponent
+<MyComponent items={elem.items} callback={elem.callback} />
 ```
 
 ### Children
