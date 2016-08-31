@@ -1,9 +1,11 @@
 import assign from 'object-assign';
 import pascalCase from 'pascal-case';
+import React from 'react';
+import ReactDOM from 'react-dom';
 
 const defaults = {
-  React: window.React,
-  ReactDOM: window.ReactDOM,
+  React,
+  ReactDOM,
 };
 
 function syncEvent(node, eventName, newEventHandler) {
@@ -31,7 +33,7 @@ export default function (CustomElement, opts) {
   const { React, ReactDOM } = opts;
 
   if (!React || !ReactDOM) {
-    throw new Error('React and ReactDOM must be globally available or passed via opts.');
+    throw new Error('React and ReactDOM must be dependencies, globally on your `window` object or passed via opts.');
   }
 
   class ReactComponent extends React.Component {

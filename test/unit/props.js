@@ -6,7 +6,7 @@ let x = 0;
 function createComponentWithOpts(opts) {
   return reactify(document.registerElement(`x-props-${x++}`, {
     prototype: Object.create(HTMLElement.prototype, opts),
-  }), { React, ReactDOM });
+  }));
 }
 function createComponentWithProp(name, done) {
   return createComponentWithOpts({
