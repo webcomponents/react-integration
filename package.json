@@ -30,11 +30,12 @@
     "react-addons-test-utils": "^0.14.3",
     "react-dom": "^0.14.3",
     "skatejs": "^0.14.3",
-    "skatejs-build": "^4.2.3",
+    "skatejs-build": "^7.2.0",
     "webcomponents.js": "0.7.22"
   },
   "peerDependencies": {
-    "react": ">=0.14.0"
+    "react": ">=0.14.0",
+    "react-dom": ">=0.14.0"
   },
   "config": {
     "commitizen": {
