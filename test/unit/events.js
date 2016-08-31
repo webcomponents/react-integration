@@ -34,7 +34,7 @@ describe('custom events', () => {
         },
       }),
     }), { React, ReactDOM });
-    const comp = ReactDOM.render(<Comp ontest={() => count++} />, window.fixture);
+    const comp = ReactDOM.render(<Comp onTest={() => count++} />, window.fixture);
 
     setTimeout(() => {
       ReactDOM.findDOMNode(comp).trigger();
@@ -58,6 +58,7 @@ describe('custom events', () => {
     const func = () => ++count;
 
     // Using both ontest and onTest (case-sensitive) test case-sensitivity.
+    // ontest should be just a normal prop
     const comp = ReactDOM.render(<Comp ontest={func} onTest={func} />, window.fixture);
 
     setTimeout(() => {
@@ -109,6 +110,29 @@ describe('custom events', () => {
     setTimeout(() => {
       ReactDOM.findDOMNode(comp).trigger();
       expect(count).to.equal(1);
+      done();
+    }, 1);
+  });
+
+  it('should not treat `once` prop as an event', done => {
+    let count = 0;
+    const Comp = reactify(document.registerElement('x-custom-event-6', {
+      prototype: Object.create(HTMLElement.prototype, {
+        trigger: {
+          value() {
+            this.dispatchEvent(new CustomEvent('ce'));
+          },
+        },
+      }),
+    }), { React, ReactDOM });
+
+    const func = () => ++count;
+
+    const comp = ReactDOM.render(<Comp once={func} />, window.fixture);
+
+    setTimeout(() => {
+      ReactDOM.findDOMNode(comp).trigger();
+      expect(count).to.equal(0);
       done();
     }, 1);
   });

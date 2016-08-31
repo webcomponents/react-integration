@@ -36,7 +36,7 @@ export default function (CustomElement, opts) {
     throw new Error('React and ReactDOM must be dependencies, globally on your `window` object or passed via opts.');
   }
 
-  return class extends React.Component {
+  class ReactComponent extends React.Component {
     static get displayName() {
       return displayName;
     }
@@ -56,7 +56,7 @@ export default function (CustomElement, opts) {
           return;
         }
 
-        if (name.indexOf('on') === 0) {
+        if (name.indexOf('on') === 0 && name[2] === name[2].toUpperCase()) {
           syncEvent(node, name.substring(2), props[name]);
         } else {
           node[name] = props[name];
@@ -67,4 +67,13 @@ export default function (CustomElement, opts) {
       return React.createElement(tagName, { style: this.props.style }, this.props.children);
     }
   };
+
+  const proto = CustomElement.prototype
+  Object.keys(proto).forEach(prop => {
+    if (typeof proto[prop] === 'function') {
+      ReactComponent.prototype[prop] = proto[prop].bind(proto);
+    }
+  });
+
+  return ReactComponent;
 }
