@@ -4,8 +4,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 const defaults = {
-  React: React || window.React,
-  ReactDOM: ReactDOM || window.ReactDOM,
+  React,
+  ReactDOM,
 };
 
 function syncEvent(node, eventName, newEventHandler) {
