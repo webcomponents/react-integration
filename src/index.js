@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom';
 
 const defaults = {
   React,
-  ReactDOM,
+  ReactDOM
 };
 
 function syncEvent(node, eventName, newEventHandler) {
@@ -27,8 +27,22 @@ function syncEvent(node, eventName, newEventHandler) {
 }
 
 export default function (CustomElement, opts) {
+  // Allows to pass the tagName instead of the CustomElement Class
+  // Avoids creating an instance of the component just to get the tagName.
+  // Makes it possible to use this with Web.Components written in TypeScript.
+  var tagName;
+  if (typeof CustomElement === 'string') {
+    tagName = CustomElement;
+    CustomElement = customElements.get(tagName);
+    if (!CustomElement) {
+      throw new Error('CustomElement ' + tagName + ' not defined.');
+    }
+  }
+  else {
+    tagName = new CustomElement().tagName;
+  }
+
   opts = assign(defaults, opts);
-  const tagName = (new CustomElement()).tagName;
   const displayName = pascalCase(tagName);
   const { React, ReactDOM } = opts;
 
@@ -66,9 +80,9 @@ export default function (CustomElement, opts) {
     render() {
       return React.createElement(tagName, { style: this.props.style }, this.props.children);
     }
-  };
+  }
 
-  const proto = CustomElement.prototype
+  const proto = CustomElement.prototype;
   Object.keys(proto).forEach(prop => {
     if (typeof proto[prop] === 'function') {
       ReactComponent.prototype[prop] = proto[prop].bind(proto);
