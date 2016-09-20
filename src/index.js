@@ -69,10 +69,8 @@ export default function (CustomElement, opts) {
   }
 
   const proto = CustomElement.prototype;
-  Object.keys(proto).forEach(prop => {
-    if (typeof proto[prop] === 'function') {
-      ReactComponent.prototype[prop] = proto[prop].bind(proto);
-    }
+  Object.getOwnPropertyNames(proto).forEach(prop => {
+    Object.defineProperty(ReactComponent.prototype, prop, Object.getOwnPropertyDescriptor(proto, prop));
   });
 
   return ReactComponent;
