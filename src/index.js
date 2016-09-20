@@ -66,13 +66,11 @@ export default function (CustomElement, opts) {
     render() {
       return React.createElement(tagName, { style: this.props.style }, this.props.children);
     }
-  };
+  }
 
-  const proto = CustomElement.prototype
-  Object.keys(proto).forEach(prop => {
-    if (typeof proto[prop] === 'function') {
-      ReactComponent.prototype[prop] = proto[prop].bind(proto);
-    }
+  const proto = CustomElement.prototype;
+  Object.getOwnPropertyNames(proto).forEach(prop => {
+    Object.defineProperty(ReactComponent.prototype, prop, Object.getOwnPropertyDescriptor(proto, prop));
   });
 
   return ReactComponent;
