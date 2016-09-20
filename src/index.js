@@ -66,9 +66,9 @@ export default function (CustomElement, opts) {
     render() {
       return React.createElement(tagName, { style: this.props.style }, this.props.children);
     }
-  };
+  }
 
-  const proto = CustomElement.prototype
+  const proto = CustomElement.prototype;
   Object.keys(proto).forEach(prop => {
     if (typeof proto[prop] === 'function') {
       ReactComponent.prototype[prop] = proto[prop].bind(proto);
