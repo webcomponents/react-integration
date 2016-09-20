@@ -38,7 +38,10 @@ describe('Webcomponent prototype functions', () => {
   });
 
   it('should not invoke getters', () => {
+    // If this functionality fails, calling createComponent() should cause the error to be thrown.
     const Comp = createComponent();
+
+    // We expect it to throw here to make sure we've written our test correctly.
     expect(() => Comp.prototype.getter).to.throw();
   });
 });
