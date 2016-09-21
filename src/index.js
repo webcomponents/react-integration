@@ -27,7 +27,7 @@ function syncEvent(node, eventName, newEventHandler) {
 }
 
 export default function (CustomElement, opts) {
-  opts = assign(defaults, opts);
+  opts = assign({}, defaults, opts);
   const tagName = (new CustomElement()).tagName;
   const displayName = pascalCase(tagName);
   const { React, ReactDOM } = opts;
