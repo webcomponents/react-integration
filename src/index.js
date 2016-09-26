@@ -43,12 +43,6 @@ export default function (CustomElement, opts) {
     static get displayName() {
       return displayName;
     }
-    static get propTypes() {
-      return {
-        children: React.PropTypes.any,
-        style: React.PropTypes.any,
-      };
-    }
     componentDidMount() {
       this.componentWillReceiveProps(this.props);
     }
