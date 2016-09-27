@@ -100,17 +100,15 @@ class MyComponent extends Component {
 
 ### Injecting React and ReactDOM
 
-By default, the React integration will look for `React` and `ReactDOM` on the window. However, this isn't the case for all apps. If you're using ES2015 modules or CommonJS, you'll have to inject them into the reactify function as options:
+By default, the React integration will import `React` and `ReactDOM` via `peerDependencies`. However, you can override this by passing your own versions:
 
 ```js
 import reactify from 'skatejs-react-integration';
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from 'my-custom-react';
+import ReactDOM from 'my-custom-react-dom';
 
-export default reactify(..., {
-  React,
-  ReactDOM
-});
+class WebComponent extends HTMLElement {}
+const ReactComponent = reactify(WebComponent, { React, ReactDOM });
 ```
 
 ### Multiple React versions
