@@ -72,6 +72,32 @@ When you pass down props to the web component, instead of setting attributes lik
 
 If your web component renders content to itself, make sure you're using Shadow DOM and that you render it to the shadow root. If you do this `children` and props get passed down as normal and React won't see your content in the shadow root.
 
+### `ref`
+
+If you need access the the underlying DOM element, you can use the standard [`ref` API](https://facebook.github.io/react/docs/more-about-refs.html). Be aware though that since you're dealing with a React Component, you'll need to use [`ReactDOM.findDOMNode`](https://facebook.github.io/react/docs/top-level-api.html#reactdom.finddomnode):
+
+```js
+import ReactDOM from 'react-dom';
+const ReactComponent = reactify(class WebComponent extends HTMLElement {});
+
+class MyComponent extends Component {
+  constructor() {
+    super();
+    this.webComponent = null;
+  }
+  
+  render() {
+    return (
+      <ReactComponent
+        ref={reactComponent => { 
+          this.webComponent = ReactDOM.findDOMNode(reactComponent);
+        }
+      />
+    );
+  }
+}
+```
+
 ### Injecting React and ReactDOM
 
 By default, the React integration will look for `React` and `ReactDOM` on the window. However, this isn't the case for all apps. If you're using ES2015 modules or CommonJS, you'll have to inject them into the reactify function as options:
