@@ -28,6 +28,9 @@ function syncEvent(node, eventName, newEventHandler) {
 
 export default function (CustomElement, opts) {
   opts = assign({}, defaults, opts);
+  if (typeof CustomElement !== 'function') {
+    throw new Error('Given element is not a valid constructor');
+  }
   const tagName = (new CustomElement()).tagName;
   const displayName = pascalCase(tagName);
   const { React, ReactDOM } = opts;
