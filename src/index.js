@@ -27,6 +27,28 @@ function syncEvent(node, eventName, newEventHandler) {
 }
 
 export default function (CustomElement, opts) {
+
+  function getCustomElementAttributes(props) {
+    const elem = new CustomElement();
+    const whitelistedProps = {}
+    Object.keys(props).forEach(name => {
+      if (name === 'children') {
+        return;
+      }
+
+      if (name === 'style') {
+        whitelistedProps.style = props[name];
+        return;
+      }
+
+      elem[name] = props[name];
+      if (elem.hasAttribute(name)) {
+        whitelistedProps[name] = props[name];
+      }
+    });
+    return whitelistedProps;
+  }
+
   opts = assign({}, defaults, opts);
   if (typeof CustomElement !== 'function') {
     throw new Error('Given element is not a valid constructor');
@@ -61,7 +83,8 @@ export default function (CustomElement, opts) {
       });
     }
     render() {
-      return React.createElement(tagName, { style: this.props.style }, this.props.children);
+      const attrs = getCustomElementAttributes(this.props);
+      return React.createElement(tagName, attrs, this.props.children);
     }
   }
 
