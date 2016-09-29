@@ -44,5 +44,6 @@
   },
   "scripts": {
     "test": "sk-tests"
-  }
+  },
+  "version": "1.0.0"
 }
