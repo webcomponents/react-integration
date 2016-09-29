@@ -27,26 +27,12 @@ function syncEvent(node, eventName, newEventHandler) {
 }
 
 export default function (CustomElement, opts) {
-
-  function getCustomElementAttributes(props) {
-    const elem = new CustomElement();
-    const whitelistedProps = {}
-    Object.keys(props).forEach(name => {
-      if (name === 'children') {
-        return;
-      }
-
-      if (name === 'style') {
-        whitelistedProps.style = props[name];
-        return;
-      }
-
-      elem[name] = props[name];
-      if (elem.hasAttribute(name)) {
-        whitelistedProps[name] = props[name];
-      }
-    });
-    return whitelistedProps;
+  function whitelistAttrs(props) {
+    const observedAttrs = (CustomElement.observedAttributes || []).reduce((acum, attr) => {
+      acum[attr] = props[attr];
+      return acum;
+    }, {});
+    return assign({ style: props.style }, observedAttrs);
   }
 
   opts = assign({}, defaults, opts);
@@ -83,8 +69,7 @@ export default function (CustomElement, opts) {
       });
     }
     render() {
-      const attrs = getCustomElementAttributes(this.props);
-      return React.createElement(tagName, attrs, this.props.children);
+      return React.createElement(tagName, whitelistAttrs(this.props), this.props.children);
     }
   }
 
