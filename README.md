@@ -74,7 +74,7 @@ If your web component renders content to itself, make sure you're using Shadow D
 
 ### `ref`
 
-If you need access the the underlying DOM element, you can use the standard [`ref` API](https://facebook.github.io/react/docs/more-about-refs.html). Be aware though that since you're dealing with a React Component, you'll need to use [`ReactDOM.findDOMNode`](https://facebook.github.io/react/docs/top-level-api.html#reactdom.finddomnode):
+If you need access the the underlying DOM element, you can use the standard [`ref` API](https://facebook.github.io/react/docs/more-about-refs.html). Beware that since you're dealing with a React Component, you'll need to use [`ReactDOM.findDOMNode`](https://facebook.github.io/react/docs/top-level-api.html#reactdom.finddomnode):
 
 ```js
 import ReactDOM from 'react-dom';
@@ -91,7 +91,7 @@ class MyComponent extends Component {
       <ReactComponent
         ref={reactComponent => { 
           this.webComponent = ReactDOM.findDOMNode(reactComponent);
-        }
+        }}
       />
     );
   }
