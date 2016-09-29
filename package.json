@@ -43,7 +43,12 @@
     }
   },
   "scripts": {
+    "prepublish": "sk-bundle",
     "test": "sk-tests"
   },
+  "files": [
+    "dist",
+    "src"
+  ],
   "version": "2.0.0"
 }
