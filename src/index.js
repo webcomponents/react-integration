@@ -28,11 +28,10 @@ function syncEvent(node, eventName, newEventHandler) {
 
 export default function (CustomElement, opts) {
   function whitelistAttrs(props) {
-    const observedAttrs = (CustomElement.observedAttributes || []).reduce((acum, attr) => {
+    return (CustomElement.observedAttributes || []).reduce((acum, attr) => {
       acum[attr] = props[attr];
       return acum;
     }, {});
-    return assign({ style: props.style }, observedAttrs);
   }
 
   opts = assign({}, defaults, opts);
@@ -51,16 +50,19 @@ export default function (CustomElement, opts) {
     static get displayName() {
       return displayName;
     }
-    componentDidMount() {
-      this.componentWillReceiveProps(this.props);
+    constructor(props) {
+      super(props);
+      this.onRef = this.onRef.bind(this);
     }
     componentWillReceiveProps(props) {
       const node = ReactDOM.findDOMNode(this);
+      this.applyProps(node, props);
+    }
+    applyProps(node, props) {
       Object.keys(props).forEach(name => {
         if (name === 'children' || name === 'style') {
           return;
         }
-
         if (name.indexOf('on') === 0 && name[2] === name[2].toUpperCase()) {
           syncEvent(node, name.substring(2), props[name]);
         } else {
@@ -68,8 +70,14 @@ export default function (CustomElement, opts) {
         }
       });
     }
+    onRef(node) {
+      if (node != null) {
+          this.applyProps(node, this.props);
+      }
+    }
     render() {
-      return React.createElement(tagName, whitelistAttrs(this.props), this.props.children);
+      const attrs = assign({ style: this.props.style, ref: this.onRef }, whitelistAttrs(this.props));
+      return React.createElement(tagName, attrs, this.props.children);
     }
   }
 
