@@ -29,8 +29,7 @@
     "react": "^15.3.1",
     "react-addons-test-utils": "^15.3.1",
     "react-dom": "^15.3.1",
-    "skatejs": "^1.2.4",
-    "skatejs-build": "10.x",
+    "skatejs-build": "12.x",
     "webcomponents.js": "0.7.22"
   },
   "peerDependencies": {
