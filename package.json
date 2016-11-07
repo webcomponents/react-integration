@@ -29,7 +29,6 @@
     "react": "^15.3.1",
     "react-addons-test-utils": "^15.3.1",
     "react-dom": "^15.3.1",
-    "skatejs": "^4.0.4",
     "skatejs-build": "12.x",
     "webcomponents.js": "0.7.22"
   },
