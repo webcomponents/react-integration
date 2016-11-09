@@ -3,6 +3,7 @@
   "description": "Use custom elements in your React components without resorting to hacks.",
   "main": "dist/index.js",
   "jsnext:main": "src/index.js",
+  "types": "src/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/skatejs/react-integration.git"
