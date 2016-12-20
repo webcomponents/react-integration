@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 type CustomElementCtor = { new(...args: any[]): HTMLElement };
 type ReactComponentCtor = { new(...args: any[]): React.Component<any, any> };
