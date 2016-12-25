@@ -63,6 +63,12 @@ export default function (CustomElementOrTagName, opts) {
 
       if (name.indexOf('on') === 0 && name[2] === name[2].toUpperCase()) {
         syncEvent(node, name.substring(2), props[name]);
+      } else if (name.indexOf('attr-') === 0) {
+        let attrValue = props[name]
+        if (typeof attrValue === 'object') {
+          attrValue = JSON.stringify(attrValue)
+        }
+        node.setAttribute(name.substring(5), attrValue)
       } else {
         node[name] = props[name];
       }
