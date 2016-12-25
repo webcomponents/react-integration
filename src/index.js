@@ -75,7 +75,14 @@ export default function (CustomElementOrTagName, opts) {
     });
     }
     render() {
-      return React.createElement(tagName, { style: this.props.style }, this.props.children);
+      return React.createElement(
+          tagName,
+          {
+            is: this.props.is,
+            style: this.props.style
+          },
+          this.props.children
+      );
     }
   }
 
