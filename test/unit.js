@@ -1,3 +1,4 @@
+import './unit/attributes';
 import './unit/children';
 import './unit/events';
 import './unit/display-name';
