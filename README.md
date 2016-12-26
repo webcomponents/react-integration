@@ -6,6 +6,7 @@ Converts web components into React components so that you can use them as first 
 - Listen for custom events triggered from web components declaratively using the standard `on*` syntax.
 - Passes React `props` to web components as properties instead of attributes.
 - Works with any web component library that uses a standard native custom element constructor, not just Skate or native web components.
+- Also supports custom elements that have been loaded using HTML imports, as well as type-extension elements.
 
 ## Usage
 
@@ -22,6 +23,9 @@ const CustomElement = window.customElements.define('my-component', MyComponent);
 
 // Reactify it!
 export default reactify(CustomElement);
+
+// You can also Reactify it using the tag name.
+export default reactify('my-component');
 ```
 
 Usage with [SkateJS](https://github.com/skatejs/skatejs) is pretty much the same, Skate just makes defining your custom element easier:
@@ -67,6 +71,67 @@ When you pass down props to the web component, instead of setting attributes lik
 // in MyComponent
 <MyComponent items={elem.items} callback={elem.callback} />
 ```
+
+### Reactifying web components loaded using HTML import
+Custom elements that depend on HTML imports (which are described in another part of the Web Components specification) were previously a bit trickier to integrate into a React project. But this `react-integration` library combined with [the `web-components` Webpack loader](https://github.com/rnicholus/web-components-loader) make the process farily painless. After integrating the Webpack loader into your project, simply `import` the root HTML file of the web component in your React component and use the generated URL to import the Web component using an HTML import in your `render` method. For example:
+
+```jsx
+import React, { Component } from 'react'
+
+import reactify from 'skatejs-react-integration'
+
+const importWcUrl = require('my-web-component/component.html')
+
+class MyWebComponentWrapper extends Component {
+  render() {
+    const MyComponent = reactify('my-web-component')
+
+    return (
+      <span>
+          <link rel='import' href={ importWcUrl } />
+          <MyComponent />
+      </span>
+    )
+  }
+}
+
+export default MyWebComponentWrapper
+```
+
+### Web component attributes
+If the underlying web component you intend to Reactify requires some properties to be set directly on the element as attributes, include an `attr-` prefix on the property name. For example:
+
+```jsx
+<MyComponent attr-data-fo='bar' />
+```
+
+The above code will set a `data-foo` attribute on the underlying custom element, instead of setting a corresponding property on the element object. An example of such a web component is [the hugely popular `<x-gif>` element](https://github.com/geelen/x-gif), which requires the GIF `src` to be set as an element and _not_ a property.
+
+### Type-extension elements
+Custom elements that extend an existing native element are also supported. Take [the ajax-form element](https://github.com/rnicholus/ajax-form) as an example. Ajax-form extends the native `<form>` element to provide additional features. This is an example of a type-extension element. In order to use any type-extension element, such as ajax-form, your render method might look something like this:
+
+```jsx
+render() {
+  const Form = reactify('form')
+  
+  return (
+    <span>
+      <link rel='import' href={ ajaxFormImportUrl } />
+      <Form attr-action='/user' 
+            is='ajax-form' 
+            attr-method='POST' 
+            onSubmit={ this.props.onSubmit }
+      >
+        <input name='name' value={ this.props.username } />
+        <input name='address' value={ this.props.address } />
+        <button>Submit</button>
+      </Form>
+    </span>
+  )
+}
+```
+
+Notice that the above example also makes use of attribute and HTML imported elemenent support, both of which are discussed earlier in the documentation.
 
 ### Children
 
