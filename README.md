@@ -98,7 +98,7 @@ class MyComponent extends Component {
 }
 ```
 
-### Injecting React and ReactDOM
+### Injecting `React` and `ReactDOM`
 
 By default, the React integration will import `React` and `ReactDOM` via `peerDependencies`. However, you can override this by passing your own versions:
 
