@@ -26,20 +26,12 @@ function syncEvent(node, eventName, newEventHandler) {
   }
 }
 
-export default function (CustomElementOrTagName, opts) {
+export default function (CustomElement, opts) {
   opts = assign({}, defaults, opts);
-  if (typeof CustomElementOrTagName !== 'function' && typeof CustomElementOrTagName !== 'string') {
-    throw new Error('Given element is not a valid constructor or tag name');
+  if (typeof CustomElement !== 'function') {
+    throw new Error('Given element is not a valid constructor');
   }
-
-  let CustomElementConstructor = CustomElementOrTagName
-  if (typeof CustomElementOrTagName === 'string') {
-    CustomElementConstructor = document.createElement(CustomElementOrTagName).constructor
-  }
-
-  const tagName = typeof CustomElementOrTagName === 'string'
-      ? CustomElementOrTagName
-      : (new CustomElementOrTagName()).tagName;
+  const tagName = (new CustomElement()).tagName;
   const displayName = pascalCase(tagName);
   const { React, ReactDOM } = opts;
 
@@ -55,24 +47,24 @@ export default function (CustomElementOrTagName, opts) {
       this.componentWillReceiveProps(this.props);
     }
     componentWillReceiveProps(props) {
-      const node = ReactDOM.findDOMNode(this);
-      Object.keys(props).forEach(name => {
-        if (name === 'children' || name === 'style') {
-        return;
-      }
+        const node = ReactDOM.findDOMNode(this);
+        Object.keys(props).forEach(name => {
+            if (name === 'children' || name === 'style') {
+                return;
+            }
 
-      if (name.indexOf('on') === 0 && name[2] === name[2].toUpperCase()) {
-        syncEvent(node, name.substring(2), props[name]);
-      } else if (name.indexOf('attr-') === 0) {
-        let attrValue = props[name];
-        if (typeof attrValue === 'object') {
-          attrValue = JSON.stringify(attrValue)
-        }
-        node.setAttribute(name.substring(5), attrValue)
-      } else {
-        node[name] = props[name];
-      }
-    });
+            if (name.indexOf('on') === 0 && name[2] === name[2].toUpperCase()) {
+                syncEvent(node, name.substring(2), props[name]);
+            } else if (name.indexOf('attr-') === 0) {
+                let attrValue = props[name];
+                if (typeof attrValue === 'object') {
+                    attrValue = JSON.stringify(attrValue)
+                }
+                node.setAttribute(name.substring(5), attrValue)
+            } else {
+                node[name] = props[name];
+            }
+        });
     }
     render() {
       return React.createElement(
@@ -86,12 +78,10 @@ export default function (CustomElementOrTagName, opts) {
     }
   }
 
-  const proto = typeof CustomElementOrTagName === 'string'
-      ? document.createElement(tagName).constructor.prototype
-      : CustomElementOrTagName.prototype;
+  const proto = CustomElement.prototype;
   Object.getOwnPropertyNames(proto).forEach(prop => {
     Object.defineProperty(ReactComponent.prototype, prop, Object.getOwnPropertyDescriptor(proto, prop));
-});
+  });
 
   return ReactComponent;
 }
