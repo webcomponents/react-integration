@@ -15,7 +15,10 @@ function createComponent() {
 describe('attrs', () => {
     it('should pass on properties that start with "attr-" as attributes', () => {
         const Comp = reactify(createComponent());
-        const comp = ReactDOM.render(<Comp attr-data-test='test-data'/>, window.fixture);
+        const attrs = {
+            'data-test': 'test-data'
+        };
+        const comp = ReactDOM.render(<Comp attrs={attrs}/>, window.fixture);
         expect(ReactDOM.findDOMNode(comp).getAttribute('data-test')).to.equal('test-data');
     });
 });

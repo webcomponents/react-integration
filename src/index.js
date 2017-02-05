@@ -53,14 +53,16 @@ export default function (CustomElement, opts) {
                 return;
             }
 
+            const value = props[name];
+
             if (name.indexOf('on') === 0 && name[2] === name[2].toUpperCase()) {
-                syncEvent(node, name.substring(2), props[name]);
-            } else if (name.indexOf('attr-') === 0) {
-                let attrValue = props[name];
-                if (typeof attrValue === 'object') {
-                    attrValue = JSON.stringify(attrValue)
-                }
-                node.setAttribute(name.substring(5), attrValue)
+                syncEvent(node, name.substring(2), value);
+            } else if (name.indexOf('attrs') === 0 && value && typeof value === 'object') {
+              Object.keys(value).forEach(attrName => {
+                  const attrValue = value[attrName];
+
+                  node.setAttribute(attrName, attrValue);
+              })
             } else {
                 node[name] = props[name];
             }
