@@ -10,14 +10,4 @@ describe('display-name', () => {
     ReactDOM.render(React.createElement(Comp), window.fixture);
     expect(Comp.displayName).to.equal('XDisplayName_1');
   });
-
-  it('should be a PasalCased version of the tagName when reactifying using CE tagName', () => {
-    document.registerElement('x-display-name-2', {
-      prototype: Object.create(HTMLElement.prototype),
-    });
-
-    const Comp = reactify('x-display-name-2', { React, ReactDOM });
-    ReactDOM.render(React.createElement(Comp), window.fixture);
-    expect(Comp.displayName).to.equal('XDisplayName_2');
-  });
 });
