@@ -15,13 +15,13 @@ Web components are converted to React components simply by passing them to the m
 import reactify from 'skatejs-react-integration';
 
 // Create your constructor.
-const MyComponent = class MyComponent extends HTMLElement {};
+class MyComponent extends HTMLElement {};
 
 // Define your custom element.
-const CustomElement = window.customElements.define('my-component', MyComponent);
+window.customElements.define('my-component', MyComponent);
 
 // Reactify it!
-export default reactify(CustomElement);
+export default reactify(MyComponent);
 ```
 
 Usage with [SkateJS](https://github.com/skatejs/skatejs) is pretty much the same, Skate just makes defining your custom element easier:
