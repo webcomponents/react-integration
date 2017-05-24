@@ -1,5 +1,7 @@
 # React Integration
 
+***We're in the process of finding alternative, more sustainable ways to integrate better with React as React is also looking at ways to do the same. We've started another project at https://github.com/skatejs/val to try and make this more opt-in from consumers of web components and to open up the integration to libraries other than React.***
+
 Converts web components into React components so that you can use them as first class citizens in your React components.
 
 - Web components become lexically scoped so you can use them as tag names in JSX.
