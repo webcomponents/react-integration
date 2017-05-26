@@ -47,21 +47,36 @@ export default function (CustomElement, opts) {
       this.componentWillReceiveProps(this.props);
     }
     componentWillReceiveProps(props) {
-      const node = ReactDOM.findDOMNode(this);
-      Object.keys(props).forEach(name => {
-        if (name === 'children' || name === 'style') {
-          return;
-        }
+        const node = ReactDOM.findDOMNode(this);
+        Object.keys(props).forEach(name => {
+            if (name === 'children' || name === 'style') {
+                return;
+            }
 
-        if (name.indexOf('on') === 0 && name[2] === name[2].toUpperCase()) {
-          syncEvent(node, name.substring(2), props[name]);
-        } else {
-          node[name] = props[name];
-        }
-      });
+            const value = props[name];
+
+            if (name.indexOf('on') === 0 && name[2] === name[2].toUpperCase()) {
+                syncEvent(node, name.substring(2), value);
+            } else if (name.indexOf('attrs') === 0 && value && typeof value === 'object') {
+              Object.keys(value).forEach(attrName => {
+                  const attrValue = value[attrName];
+
+                  node.setAttribute(attrName, attrValue);
+              })
+            } else {
+                node[name] = props[name];
+            }
+        });
     }
     render() {
-      return React.createElement(tagName, { style: this.props.style }, this.props.children);
+      return React.createElement(
+          tagName,
+          {
+            is: this.props.is,
+            style: this.props.style
+          },
+          this.props.children
+      );
     }
   }
 
