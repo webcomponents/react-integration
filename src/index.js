@@ -43,10 +43,15 @@ export default function (CustomElement, opts) {
     static get displayName() {
       return displayName;
     }
+    getNativeElement() {
+      return this._elementNode;
+    }
     componentDidMount() {
+      this._elementNode = ReactDOM.findDOMNode(this);
       this.componentWillReceiveProps(this.props);
     }
     componentWillReceiveProps(props) {
+      const node = this.getNativeElement();
       const node = ReactDOM.findDOMNode(this);
       Object.keys(props).forEach(name => {
         if (name === 'children' || name === 'style') {
