@@ -52,7 +52,6 @@ export default function (CustomElement, opts) {
     }
     componentWillReceiveProps(props) {
       const node = this.getNativeElement();
-      const node = ReactDOM.findDOMNode(this);
       Object.keys(props).forEach(name => {
         if (name === 'children' || name === 'style') {
           return;
